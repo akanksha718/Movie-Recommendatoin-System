@@ -1,7 +1,7 @@
 # Movie Recommendation System (TMDB 5000)
 
 A simple content-based movie recommendation project built from the TMDB 5000 dataset. The current notebook cleans and merges movie and credits data, extracts relevant textual features, and constructs a consolidated "tag" for each movie. This tag can be vectorized (e.g., TF‑IDF/CountVectorizer) to compute similarities for recommendations.
-
+<a href="https://movie-recomandation.streamlit.app/">Live Preview</a>
 ## Overview
 - **Goal:** Recommend similar movies using content-based features from TMDB metadata.
 - **Data:** TMDB 5000 Movies and Credits CSVs.
@@ -47,35 +47,6 @@ Then open `movie-recommander.ipynb` and run the cells in order. The notebook wil
 - Parse genres/keywords/cast/crew
 - Build a normalized `tag` text for each movie
 
-## Extending to Recommendations
-Add cells at the end of the notebook to vectorize tags and compute similarities. Example outline:
-
-```python
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-
-# Vectorize the tag text
-cv = CountVectorizer(max_features=5000, stop_words='english')
-vectors = cv.fit_transform(newdf['tag']).toarray()
-similarity = cosine_similarity(vectors)
-
-def recommend(title, top_k=5):
-	# Find index of the movie
-	idx = newdf[newdf['title'].str.lower() == title.lower()].index
-	if len(idx) == 0:
-		return []
-	idx = idx[0]
-	# Get similarity scores and sort
-	scores = list(enumerate(similarity[idx]))
-	scores = sorted(scores, key=lambda x: x[1], reverse=True)
-	# Return top_k similar titles (excluding the movie itself)
-	recs = []
-	for i, _ in scores[1:top_k+1]:
-		recs.append(newdf.iloc[i]['title'])
-	return recs
-
-# Example
-recommend("Avatar", top_k=5)
 ```
 
 ## Notes
